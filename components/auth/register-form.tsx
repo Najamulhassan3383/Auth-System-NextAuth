@@ -49,7 +49,7 @@ export default function RegisterForm() {
         if (response.errors) {
           setError(response.errors);
         } else {
-          setSuccess(response.message);
+          setSuccess(response.success);
         }
       });
     });
