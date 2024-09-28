@@ -20,16 +20,12 @@ import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
 import { Button } from "../ui/button";
 import { loginAction } from "@/actions/login";
-import { State } from "@/actions/login";
-import { useActionState } from "react";
 import { useTransition } from "react";
 import FormError from "../form-error";
-import FormSuccess from "../form-success";
 export default function LoginForm() {
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -44,13 +40,10 @@ export default function LoginForm() {
   };
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setError("");
-    setSuccess("");
     startTransition(() => {
       loginAction(data).then((response) => {
-        if (response.errors) {
-          setError(response.errors);
-        } else {
-          setSuccess(response.message);
+        if (response?.errors) {
+          setError(response?.errors);
         }
       });
     });
@@ -117,7 +110,6 @@ export default function LoginForm() {
             />
           </div>
           <FormError message={error} />
-          <FormSuccess message={success} />
 
           <Button type="submit" className="w-full">
             {isPending ? "Loading..." : "Login"}

@@ -1,9 +1,10 @@
 "use server";
 import { RegisterSchema } from "@/schemas";
 import * as z from "zod";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { db } from "@/lib/db/drizzle";
 import { users } from "@/lib/db/schemas";
+import { getUserByEmail } from "@/db_utils/user";
 
 export async function RegisterAction(values: z.infer<typeof RegisterSchema>) {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -19,9 +20,7 @@ export async function RegisterAction(values: z.infer<typeof RegisterSchema>) {
 
   //check if email is not taken
   // Assuming your user table is named 'users' in your schema definition
-  const existingUser = await db.query.users.findFirst({
-    where: (user, { eq }) => eq(user.email, email),
-  });
+  const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
     return {

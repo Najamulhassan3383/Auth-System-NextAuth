@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import LoginButton from "@/components/auth/login-button";
+import { auth } from "@/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
   return (
     <div className="flex h-full flex-col items-center justify-center bg-gradient-to-bl from-slate-900 via-purple-900 to-slate-900">
       <div className="text-center space-y-4">
@@ -11,7 +13,7 @@ export default function Home() {
       </div>
       <LoginButton>
         <Button variant="secondary" size="lg">
-          Sign In
+          {session ? "Logout" : "Login"}
         </Button>
       </LoginButton>
     </div>
