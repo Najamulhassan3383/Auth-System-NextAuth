@@ -10,7 +10,7 @@ interface BackButtonProps {
 
 function BackButton({ label, href }: BackButtonProps) {
   return (
-    <Button varient='link' className="font-normal w-full" asChild>
+    <Button variant="link" className="font-normal w-full" asChild>
       <Link href={href}>{label}</Link>
     </Button>
   );

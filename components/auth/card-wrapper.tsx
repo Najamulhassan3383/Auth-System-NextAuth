@@ -31,7 +31,7 @@ function CardWrapper({
       <CardHeader className="space-y-1">
         <Header headerLabel={headerLabel} />
       </CardHeader>
-      <CardContent className="grid gap-4">{children}</CardContent>
+      <CardContent className="grid gap-2">{children}</CardContent>
       {showSocial && (
         <CardFooter>
           <Social />

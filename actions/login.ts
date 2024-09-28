@@ -11,33 +11,16 @@ export type State = {
   success?: boolean;
 };
 
-export async function loginAction(prevState: State, formdata: FormData) {
-  const validatedValues = LoginSchema.safeParse({
-    email: formdata.get("email") as string,
-    password: formdata.get("password") as string,
-  });
+export async function loginAction(values: z.infer<typeof LoginSchema>) {
+  const validatedFields = LoginSchema.safeParse(values);
 
-  if (!validatedValues.success) {
+  if (!validatedFields.success) {
     return {
-      errors: validatedValues.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create User",
-      success: false,
+      errors: "Invalid form data",
     };
   }
-  try {
-    
-  } catch (error) {
-    return {
-      errors: {},
-      message: "Login Failed",
-      success: false
-    
-  }
 
-  console.log("Login Action", validatedValues.data);
   return {
-    errors: {},
-    message: "Login Successful",
-    success: true,
+    message: "Successfull",
   };
 }

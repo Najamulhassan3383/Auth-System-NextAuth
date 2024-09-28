@@ -15,26 +15,25 @@ import {
 } from "@/components/ui/form";
 
 import CardWrapper from "./card-wrapper";
-import { LoginSchema } from "@/schemas";
+import { RegisterSchema } from "@/schemas";
 import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
 import { Button } from "../ui/button";
-import { loginAction } from "@/actions/login";
-import { State } from "@/actions/login";
-import { useActionState } from "react";
 import { useTransition } from "react";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
-export default function LoginForm() {
+import { RegisterAction } from "@/actions/register";
+export default function RegisterForm() {
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
+      name: "",
       password: "",
     },
   });
@@ -42,11 +41,11 @@ export default function LoginForm() {
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      loginAction(data).then((response) => {
+      RegisterAction(data).then((response) => {
         if (response.errors) {
           setError(response.errors);
         } else {
@@ -58,9 +57,9 @@ export default function LoginForm() {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/auth/register"
+      headerLabel="Create an account"
+      backButtonLabel="Already have an account?"
+      backButtonHref="/auth/login"
       showSocial
     >
       <Form {...form}>
@@ -76,6 +75,23 @@ export default function LoginForm() {
                     <Input
                       {...field}
                       placeholder="johndoe@email.com"
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="name">Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="John Doe"
                       disabled={isPending}
                     />
                   </FormControl>
