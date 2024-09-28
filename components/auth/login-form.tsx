@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Label } from "@/components/ui/label";
 import CardWrapper from "./card-wrapper";
 import { LoginSchema } from "@/schemas";
 import { FaEye } from "react-icons/fa";
@@ -22,8 +21,18 @@ import { IoMdEyeOff } from "react-icons/io";
 import { Button } from "../ui/button";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
-
+import { loginAction } from "@/actions/login";
+import { State } from "@/actions/login";
+import { useActionState } from "react";
 export default function LoginForm() {
+  const initialState: State = { message: null, errors: {}, success: false };
+  const [state, loginFormAction, isPending] = useActionState(
+    loginAction,
+    initialState
+  );
+
+  console.log(state);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -38,10 +47,6 @@ export default function LoginForm() {
     setShowPassword((prev) => !prev);
   };
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
-  };
-
   return (
     <CardWrapper
       headerLabel="Welcome back"
@@ -50,7 +55,7 @@ export default function LoginForm() {
       showSocial
     >
       <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="space-y-4" action={loginFormAction}>
           <div className="space-y-3">
             <FormField
               control={form.control}
@@ -59,7 +64,11 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="johndoe@email.com" />
+                    <Input
+                      {...field}
+                      placeholder="johndoe@email.com"
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,10 +86,12 @@ export default function LoginForm() {
                         {...field}
                         type={showPassword ? "text" : "password"}
                         placeholder="1234"
+                        disabled={isPending}
                       />
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}
+                        disabled={isPending}
                         className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
                       >
                         {showPassword ? (
@@ -96,10 +107,9 @@ export default function LoginForm() {
               )}
             />
           </div>
-          {/* <FormError message="Some Thing Went Wrong" /> */}
-          <FormSuccess message="Success" />
+
           <Button type="submit" className="w-full">
-            Login
+            {isPending ? "Loading..." : "Login"}
           </Button>
         </form>
       </Form>

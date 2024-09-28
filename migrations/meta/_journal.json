@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1727456463339,
+      "tag": "0000_sparkling_patch",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727497048389,
+      "tag": "0001_lovely_unicorn",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1727497785208,
+      "tag": "0002_same_baron_zemo",
+      "breakpoints": true
+    }
+  ]
+}
