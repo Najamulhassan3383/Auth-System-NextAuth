@@ -4,6 +4,7 @@ import { LoginSchema } from "@/schemas";
 import * as z from "zod";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { redirect } from "next/navigation";
 
 export async function loginAction(values: z.infer<typeof LoginSchema>) {
@@ -14,11 +15,20 @@ export async function loginAction(values: z.infer<typeof LoginSchema>) {
       errors: "Invalid form data",
     };
   }
-
+  const { email, password } = validatedFields.data;
   try {
+    console.log(
+      "credentials",
+      email,
+      password,
+      "redirect",
+      DEFAULT_LOGIN_REDIRECT
+    );
     await signIn("credentials", {
-      ...validatedFields.data,
-      redirect: false,
+      email,
+      password,
+      redirect: true,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -33,11 +43,6 @@ export async function loginAction(values: z.infer<typeof LoginSchema>) {
           };
       }
     }
-
-    return {
-      errors: "An unexpected error occurred",
-    };
+    throw error;
   }
-
-  redirect("/");
 }
