@@ -17,13 +17,7 @@ export async function loginAction(values: z.infer<typeof LoginSchema>) {
   }
   const { email, password } = validatedFields.data;
   try {
-    console.log(
-      "credentials",
-      email,
-      password,
-      "redirect",
-      DEFAULT_LOGIN_REDIRECT
-    );
+  
     await signIn("credentials", {
       email,
       password,

@@ -6,8 +6,12 @@ import {
   primaryKey,
   boolean,
   varchar,
+  pgEnum,
 } from "drizzle-orm/pg-core";
+
 import type { AdapterAccountType } from "next-auth/adapters";
+
+export const USERROLE = pgEnum("userRole", ["user", "admin"]);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -16,6 +20,7 @@ export const users = pgTable("user", {
   name: text("name"),
   email: text("email").unique(),
   password: varchar("password"),
+  role: USERROLE("userRole").default("user").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
