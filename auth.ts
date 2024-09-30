@@ -15,7 +15,6 @@ declare module "next-auth" {
   }
   interface User {
     role: "user" | "admin" | null;
-    verif
   }
 }
 
@@ -49,12 +48,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      if (!user.) {
-        return true;
-      }
-      return true;
-    },
     jwt({ token, user }) {
       if (user) {
         // User is available during sign-in
